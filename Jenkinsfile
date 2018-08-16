@@ -32,8 +32,18 @@ node {
                 junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
-		
-		stage('Directory Permission') {
+
+        stage('frontend tests') {
+            try {
+                sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test"
+            } catch(err) {
+                throw err
+            } finally {
+                junit '**/target/test-results/jest/TESTS-*.xml'
+            }
+        }
+        
+        stage('Directory Permission') {
 		    sh "chmod 777 -R target"
         }
 
