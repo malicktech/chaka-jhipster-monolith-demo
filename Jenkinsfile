@@ -32,7 +32,10 @@ node {
                 junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
-
+		
+		stage('Directory Permission') {
+		    sh "chmod 777 -R target"
+        }
 
         stage('packaging') {
             sh "./mvnw verify -Pprod -DskipTests"
