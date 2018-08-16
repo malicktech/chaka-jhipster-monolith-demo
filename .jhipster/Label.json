@@ -1,0 +1,27 @@
+{
+    "name": "Label",
+    "fields": [
+        {
+            "fieldName": "label",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "relationshipName": "operations",
+            "otherEntityName": "operation",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "labels"
+        }
+    ],
+    "changelogDate": "20180815185851",
+    "entityTableName": "label",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
