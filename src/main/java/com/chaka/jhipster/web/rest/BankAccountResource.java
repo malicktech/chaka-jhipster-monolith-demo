@@ -1,7 +1,8 @@
 package com.chaka.jhipster.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.chaka.jhipster.domain.BankAccount;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.chaka.jhipster.domain.BankAccount;import com.chaka.jhipster.domain.Views;
 import com.chaka.jhipster.service.BankAccountService;
 import com.chaka.jhipster.web.rest.errors.BadRequestAlertException;
 import com.chaka.jhipster.web.rest.util.HeaderUtil;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -105,12 +107,24 @@ public class BankAccountResource {
      */
     @GetMapping("/bank-accounts/{id}")
     @Timed
+    @Secured("ROLE_ADMIN")
+    @JsonView(Views.Private.class)
     public ResponseEntity<BankAccount> getBankAccount(@PathVariable Long id) {
         log.debug("REST request to get BankAccount : {}", id);
         Optional<BankAccount> bankAccount = bankAccountService.findOne(id);
         return ResponseUtil.wrapOrNotFound(bankAccount);
     }
 
+    @GetMapping("/bank-accounts/{id}")
+    @Timed
+    @Secured("ROLE_USER")
+    @JsonView(Views.Public.class)
+    public ResponseEntity<BankAccount> getBankAccountUser(@PathVariable Long id) {
+        log.debug("REST request to get BankAccount : {}", id);
+        Optional<BankAccount> bankAccount = bankAccountService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(bankAccount);
+    }
+    
     /**
      * DELETE  /bank-accounts/:id : delete the "id" bankAccount.
      *

@@ -2,6 +2,8 @@ package com.chaka.jhipster.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -32,10 +34,12 @@ public class BankAccount implements Serializable {
 
     @NotNull
     @Column(name = "name", nullable = false)
+    @JsonView(Views.Public.class)
     private String name;
 
     @NotNull
     @Column(name = "balance", precision = 10, scale = 2, nullable = false)
+    @JsonView(Views.Private.class)
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
