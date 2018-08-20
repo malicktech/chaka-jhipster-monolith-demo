@@ -43,6 +43,10 @@ node {
             }
         }
 
+        stage('Directory Permission') { 
+            sh "chmod 777 -R target" 
+        }
+
         stage('packaging') {
             sh "./mvnw verify -Pprod -DskipTests"
             archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
