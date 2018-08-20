@@ -5,7 +5,7 @@ node {
         checkout scm
     }
 
-    docker.image('openjdk:8').inside('-u root -e MAVEN_OPTS="-Duser.home=./"') {
+    docker.image('jhipster/jhipster:v5.2.1').inside('-u root -e MAVEN_OPTS="-Duser.home=./"') {
         stage('check java') {
             sh "java -version"
         }
@@ -16,7 +16,7 @@ node {
         }
 
         stage('install tools') {
-            sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.6.0"
+            sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v8.11.3 -DyarnVersion=v1.9.2"
         }
 
         stage('yarn install') {
@@ -42,18 +42,13 @@ node {
                 junit '**/target/test-results/jest/TESTS-*.xml'
             }
         }
-        
-        stage('Directory Permission') {
-		    sh "chmod 777 -R target"
-        }
 
         stage('packaging') {
             sh "./mvnw verify -Pprod -DskipTests"
             archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
         }
-
         stage('quality analysis') {
-            withSonarQubeEnv('Sonar') {
+            withSonarQubeEnv('sonar') {
                 sh "./mvnw sonar:sonar"
             }
         }
@@ -63,7 +58,7 @@ node {
     stage('build docker') {
         sh "cp -R src/main/docker target/"
         sh "cp target/*.war target/docker/"
-        dockerImage = docker.build('sn-ecommerce/chaka_jhipster_monolith', 'target/docker')
+        dockerImage = docker.build('snecommerce/chaka_jhipster_monolith', 'target/docker')
     }
 
     stage('publish docker') {
