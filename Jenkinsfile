@@ -52,9 +52,10 @@ node {
             archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
         }
         stage('quality analysis') {
-            withSonarQubeEnv('sonar') {
-                sh "./mvnw sonar:sonar"
-            }
+            sh "./mvnw sonar:sonar   -Dsonar.organization=citizendiop-bitbucket   -Dsonar.host.url=https://sonarcloud.io   -Dsonar.login=9673297c05bcc97bb1f40b2d84a6191a6a2d5595"
+            // withSonarQubeEnv('sonar') {
+            //     sh "./mvnw sonar:sonar"
+            // }
         }
     }
 
@@ -62,7 +63,7 @@ node {
     stage('build docker') {
         sh "cp -R src/main/docker target/"
         sh "cp target/*.war target/docker/"
-        dockerImage = docker.build('snecommerce/chaka_jhipster_monolith', 'target/docker')
+        dockerImage = docker.build('snecommerce/chaka-jhipster-monolith', 'target/docker')
     }
 
     stage('publish docker') {
